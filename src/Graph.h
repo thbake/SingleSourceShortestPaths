@@ -13,13 +13,17 @@ class Neighbor
 {
 	public: 
 
+	Neighbor();
+
 	Neighbor(size_t const node_id, double const weight);
 
-	Neighbor(Neighbor const& src);
+	~Neighbor() = default;
+
+	Neighbor(Neighbor const& src) = delete;
 
 	Neighbor(Neighbor&& src) noexcept;
 
-	Neighbor& operator=(Neighbor const& src);
+	Neighbor& operator=(Neighbor const& src) = delete;
 
 	Neighbor& operator=(Neighbor&& src) noexcept;
 
@@ -41,11 +45,11 @@ class Node
 
 	~Node() = default;
 
-	Node(Node const& src);
+	Node(Node const& src) = delete;
 
-	Node(Node&& src) noexcept = default;
+	Node(Node&& src) noexcept;
 
-	Node& operator=(Node const& src);
+	Node& operator=(Node const& src) = delete;
 
 	Node& operator=(Node&& src) noexcept;
 
@@ -61,7 +65,8 @@ class Node
 
 	friend bool operator!=(Node const& lhs, Node const& rhs);
 
-	std::vector<Neighbor> get_neighbors() const { return neighbors; };
+	// Return constant reference because otherwise we would copy
+	std::vector<Neighbor>const& get_neighbors() const { return neighbors; };
 
 	void add_neighbor(size_t const node_id, double const weight);
 
@@ -76,6 +81,8 @@ class Node
 
 class Graph
 {
+	friend class GraphData;
+
 	public:
 
 	Graph();

@@ -3,42 +3,103 @@
 #include <cassert>
 
 // Neighbor implementation
+// -----------------------
+
+// Constructors
+
+Neighbor::Neighbor(): node_id { 0 }, weight { 0.0 }
+{}
+
 Neighbor::Neighbor(size_t const node_id, double const weight):
 	node_id { node_id },
 	weight  { weight }
 
 {}
 
+//Neighbor::Neighbor(Neighbor const& src): node_id { src.node_id }, weight { src.weight }
+//{}
+
+Neighbor::Neighbor(Neighbor&& src) noexcept: 
+	node_id { std::move(src.node_id) }, 
+	weight  { std::move(src.weight) }
+
+{
+	src.node_id = 0;
+	src.weight  = 0.0;
+}
+
+// Operators
+
+//Neighbor& Neighbor::operator=(Neighbor const& src)
+//{
+//	if (this != &src)
+//	{
+//		node_id = src.node_id;
+//		weight  = src.weight;
+//	}
+//
+//	return *this;
+//}
+
+Neighbor& Neighbor::operator=(Neighbor&& src) noexcept
+{
+	if (this != &src)
+	{
+		node_id = std::move(src.node_id);
+		weight  = std::move(src.weight);
+
+		src.node_id = 0;
+		src.weight  = 0.0;
+	}
+
+	return *this;
+}
 // Node implementation
 // -------------------
 
 // Constructors
 
-Node::Node(size_t const node_id): node_id { node_id }
+Node::Node(): node_id { 0 }, neighbors{}
 {}
 
-Node::Node(Node const& src): node_id { src.node_id }
+Node::Node(size_t const node_id): node_id { node_id }, neighbors{}
 {}
+
+//Node::Node(Node const& src): node_id { src.node_id }, neighbors { src.neighbors }
+//{}
+
+Node::Node(Node&& src) noexcept: 
+	node_id   { std::move(src.node_id) }, 
+	neighbors { std::move(src.neighbors) }
+{
+	src.node_id = 0;
+	assert(src.neighbors.empty());
+}
+
 
 // Operators
 
-Node& Node::operator=(Node const& src)
-{
-	if (this != &src)
-	{
-		node_id = src.node_id;
-	}
+//Node& Node::operator=(Node const& src)
+//{
+//	if (this != &src)
+//	{
+//		node_id   = src.node_id;
+//		neighbors = src.neighbors;
+//	}
+//
+//	return *this;
+//}
 
-	return *this;
-}
 Node& Node::operator=(Node&& src) noexcept
 {
 	if (this != &src)
 	{
-		node_id = src.node_id;
+		node_id   = std::move(src.node_id);
+		neighbors = std::move(src.neighbors);
 	}
 
 	src.node_id = 0;
+	assert(neighbors.empty());
 
 	return *this;
 }
@@ -81,9 +142,16 @@ void Node::add_neighbor(size_t const node_id, double const weight)
 
 // Graph implementation
 
-Graph::Graph(Graph&& src) noexcept:
-	nodes { src.nodes }
+// Constructors
+
+Graph::Graph(): is_empty { true }, nodes {}
 {}
+
+Graph::Graph(Graph&& src) noexcept:
+	nodes { std::move(src.nodes) }
+{
+	assert(src.nodes.empty());
+}
 
 Graph& Graph::operator=(Graph&& src) noexcept
 {
