@@ -27,6 +27,8 @@ class Neighbor
 
 	Neighbor& operator=(Neighbor&& src) noexcept;
 
+	friend std::ostream& operator<<(std::ostream& os, Neighbor const& src);
+
 	private:
 
 	size_t node_id;
@@ -35,8 +37,11 @@ class Neighbor
 
 };
 
+
 class Node 
 {
+	friend class GraphData;
+
 	public:
 
 	Node();
@@ -68,15 +73,20 @@ class Node
 	// Return constant reference because otherwise we would copy
 	std::vector<Neighbor>const& get_neighbors() const { return neighbors; };
 
+	void set_id(size_t const id) { node_id = id; }
+
 	void add_neighbor(size_t const node_id, double const weight);
 
-	size_t node_id;
+	friend std::ostream& operator<<(std::ostream& os, Node const& src);
 
 	private:
+
+	size_t node_id;
 
 	std::vector<Neighbor> neighbors;
 
 };
+
 
 
 class Graph

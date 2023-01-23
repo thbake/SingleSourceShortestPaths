@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build",
+  "command": "/usr/bin/c++  -I/home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/../include/SingleSourceShortestPaths -Wall -Wextra -Wconversion -pedantic -std=c++17 -o CMakeFiles/ss_shortest_paths.dir/main.cpp.o -c /home/thbake/WS22_23/SciComp/ExerciseRepos/project/main.cpp",
+  "file": "/home/thbake/WS22_23/SciComp/ExerciseRepos/project/main.cpp"
+},
+{
+  "directory": "/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/src",
+  "command": "/usr/bin/c++  -I/home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/../include/SingleSourceShortestPaths -Wall -Wextra -Wconversion -pedantic -std=c++17 -o CMakeFiles/Algorithms.dir/Algorithms/Dijkstra.cpp.o -c /home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/Algorithms/Dijkstra.cpp",
+  "file": "/home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/Algorithms/Dijkstra.cpp"
+},
+{
+  "directory": "/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/src",
+  "command": "/usr/bin/c++  -I/home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/../include/SingleSourceShortestPaths -Wall -Wextra -Wconversion -pedantic -std=c++17 -o CMakeFiles/Data.dir/Data/GraphData.cpp.o -c /home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/Data/GraphData.cpp",
+  "file": "/home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/Data/GraphData.cpp"
+},
+{
+  "directory": "/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/src",
+  "command": "/usr/bin/c++  -I/home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/../include/SingleSourceShortestPaths -Wall -Wextra -Wconversion -pedantic -std=c++17 -o CMakeFiles/Structures.dir/Structures/Graph.cpp.o -c /home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/Structures/Graph.cpp",
+  "file": "/home/thbake/WS22_23/SciComp/ExerciseRepos/project/src/Structures/Graph.cpp"
+}
+]

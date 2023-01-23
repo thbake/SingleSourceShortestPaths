@@ -27,7 +27,7 @@ void GraphData::read_from_file()
 
 	for (size_t i = 0; i < number_nodes; ++i)
 	{
-		graph.nodes[i].node_id = i;
+		graph.nodes[i].set_id(i);
 	}
 
 	size_t tail_id;
@@ -48,31 +48,18 @@ void GraphData::read_from_file()
 		}
 
 		// Start adding edges
-		nodes[tail_id - 1].add_neighbor(tail_id - 1, weight);
+		graph.nodes[tail_id - 1].add_neighbor(head_id - 1, weight);
 
 		// Add both ends if we are dealing with an undirected graph.
 		if (not is_directed)
 		{
-			nodes[head_id - 1].add_neighbor(head_id - 1, weight);
+			graph.nodes[head_id - 1].add_neighbor(tail_id - 1, weight);
 		}
 	}
 
 	input_file.close();
 
 	assert(!input_file.is_open());
-}
-
-void GraphData::print_graph() const
-{
-	std::cout << "Graph with " << number_nodes  
-		      << " nodes and " << number_edges << ":\n";
-
-	for (size_t i = 0; i < number_nodes; ++i)
-	{
-		std::cout << "[ " << graph.nodes[i] << " -> " ]"
-	}
-
-	 
 }
 
 template<typename T>
@@ -82,8 +69,37 @@ void print_vector_brackets(std::vector<T>const& v)
 
 	for (unsigned i = 0; i < v.size() - 1; ++i)	
 	{
-		std::cout << v[i].first << ", " ;
+		std::cout << v[i] << ", " ;
 	}
 
-	std::cout << v[v.size() - 1] << " ]\n";
+	std::cout << v[v.size() - 1] << " ]";
 }
+
+void GraphData::print_graph() const
+{
+	std::string connection;
+
+	if (is_directed)
+	{
+		connection = "arcs";
+	}
+	else
+	{
+		connection = "edges";
+	}
+
+	std::cout << "Graph with " << number_nodes  
+		      << " nodes and " << number_edges << " edges:\n";
+
+	for (size_t i = 0; i < number_nodes; ++i)
+	{
+		std::cout << "{ " 
+			      << graph.nodes[i] 
+				  << " -> " ; 
+				  print_vector_brackets(graph.nodes[i].neighbors); 
+		std::cout << "} \n";
+	}
+
+	 
+}
+

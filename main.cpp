@@ -19,5 +19,8 @@ int main(int argc, char const* const* const argv)
 	size_t sink   = std::stoul(argv[3]);
 
 	GraphData data(filename, false);
+
 	data.read_from_file();
+
+	data.print_graph();
 }

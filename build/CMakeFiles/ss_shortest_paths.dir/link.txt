@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ss_shortest_paths.dir/main.cpp.o -o ss_shortest_paths  src/libAlgorithms.a src/libStructures.a src/libData.a 

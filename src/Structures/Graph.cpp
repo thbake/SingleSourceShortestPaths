@@ -54,6 +54,14 @@ Neighbor& Neighbor::operator=(Neighbor&& src) noexcept
 
 	return *this;
 }
+
+std::ostream& operator<<(std::ostream& os, Neighbor const& src)
+{
+	os <<  "( " << src.node_id << " | " << src.weight << " )"; 
+
+	return os;
+}
+
 // Node implementation
 // -------------------
 
@@ -132,6 +140,13 @@ bool operator==(Node const& lhs, Node const& rhs)
 bool operator!=(Node const& lhs, Node const& rhs)
 {
 	return !(lhs == rhs);
+}
+
+std::ostream& operator<<(std::ostream& os, Node const& src)
+{
+	os << src.node_id;
+
+	return os;
 }
 
 // Functions
