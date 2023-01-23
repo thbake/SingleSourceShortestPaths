@@ -1,4 +1,4 @@
-#include "Graph.h"
+#include "Structures/Graph.h"
 
 #include <cassert>
 

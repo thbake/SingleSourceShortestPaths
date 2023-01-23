@@ -18,12 +18,12 @@ endif()
 add_subdirectory(src)
 
 # The executable library code is here
-add_executable(ss_shortest_paths main.cpp)
+add_executable(shortest_paths main.cpp)
 
-target_link_libraries(ss_shortest_paths
+target_link_libraries(shortest_paths
 	PUBLIC Algorithms
-	PUBLIC Structures
 	PUBLIC Data
+	PUBLIC Structures
 	)
 
 

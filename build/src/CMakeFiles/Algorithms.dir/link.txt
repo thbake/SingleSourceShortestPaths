@@ -1,2 +1,0 @@
-/usr/bin/ar qc libAlgorithms.a CMakeFiles/Algorithms.dir/Algorithms/Dijkstra.cpp.o
-/usr/bin/ranlib libAlgorithms.a

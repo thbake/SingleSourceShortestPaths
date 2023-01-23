@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graph.h"
+#include "Structures/Graph.h"
 
 #include <fstream>
 #include <cassert>

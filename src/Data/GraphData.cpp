@@ -1,4 +1,4 @@
-#include "GraphData.h"
+#include "Data/GraphData.h"
 
 GraphData::GraphData(std::string const& filename, bool const is_directed):
 	graph(),

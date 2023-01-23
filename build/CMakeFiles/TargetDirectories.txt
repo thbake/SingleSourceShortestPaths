@@ -1,8 +1,0 @@
-/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/CMakeFiles/ss_shortest_paths.dir
-/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/CMakeFiles/edit_cache.dir
-/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/CMakeFiles/rebuild_cache.dir
-/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/src/CMakeFiles/Algorithms.dir
-/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/src/CMakeFiles/Data.dir
-/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/src/CMakeFiles/Structures.dir
-/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/src/CMakeFiles/edit_cache.dir
-/home/thbake/WS22_23/SciComp/ExerciseRepos/project/build/src/CMakeFiles/rebuild_cache.dir

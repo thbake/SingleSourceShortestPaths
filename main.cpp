@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "src/GraphData.h"
+#include "Data/GraphData.h"
 
 	
 int main(int argc, char const* const* const argv)
