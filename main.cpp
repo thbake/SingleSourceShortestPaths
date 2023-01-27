@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "Data/GraphData.h"
-
+#include "Algorithms/Algorithm.h"
+#include "Algorithms/Dijkstra.h"
 	
 int main(int argc, char const* const* const argv)
 {
@@ -15,12 +15,22 @@ int main(int argc, char const* const* const argv)
 	}
 	
 	filename      = argv[1];
-	size_t source = std::stoul(argv[2]);
-	size_t sink   = std::stoul(argv[3]);
+	size_t source = std::stoul(argv[2]) - 1;
+	size_t sink   = std::stoul(argv[3]) - 1;
 
-	GraphData data(filename, false);
+	GraphData data(filename, true);
 
 	data.read_from_file();
 
-	data.print_graph();
+	Graph graph(data);
+
+	graph.print();
+
+	Algorithm::ShortestPaths paths = Algorithm::Dijkstra::heap_dijkstra(graph, source);
+
+	//Graph::print_vector_brackets(paths.predecessors);
+
+	Algorithm::output_shortest_path(paths, sink);
+
+
 }

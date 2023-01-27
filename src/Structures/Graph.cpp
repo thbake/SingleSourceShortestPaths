@@ -1,169 +1,30 @@
 #include "Structures/Graph.h"
 
-#include <cassert>
-
-// Neighbor implementation
-// -----------------------
-
-// Constructors
-
-Neighbor::Neighbor(): node_id { 0 }, weight { 0.0 }
-{}
-
-Neighbor::Neighbor(size_t const node_id, double const weight):
-	node_id { node_id },
-	weight  { weight }
-
-{}
-
-//Neighbor::Neighbor(Neighbor const& src): node_id { src.node_id }, weight { src.weight }
-//{}
-
-Neighbor::Neighbor(Neighbor&& src) noexcept: 
-	node_id { std::move(src.node_id) }, 
-	weight  { std::move(src.weight) }
-
-{
-	src.node_id = 0;
-	src.weight  = 0.0;
-}
-
-// Operators
-
-//Neighbor& Neighbor::operator=(Neighbor const& src)
-//{
-//	if (this != &src)
-//	{
-//		node_id = src.node_id;
-//		weight  = src.weight;
-//	}
-//
-//	return *this;
-//}
-
-Neighbor& Neighbor::operator=(Neighbor&& src) noexcept
-{
-	if (this != &src)
-	{
-		node_id = std::move(src.node_id);
-		weight  = std::move(src.weight);
-
-		src.node_id = 0;
-		src.weight  = 0.0;
-	}
-
-	return *this;
-}
-
-std::ostream& operator<<(std::ostream& os, Neighbor const& src)
-{
-	os <<  "( " << src.node_id << " | " << src.weight << " )"; 
-
-	return os;
-}
-
-// Node implementation
-// -------------------
-
-// Constructors
-
-Node::Node(): node_id { 0 }, neighbors{}
-{}
-
-Node::Node(size_t const node_id): node_id { node_id }, neighbors{}
-{}
-
-//Node::Node(Node const& src): node_id { src.node_id }, neighbors { src.neighbors }
-//{}
-
-Node::Node(Node&& src) noexcept: 
-	node_id   { std::move(src.node_id) }, 
-	neighbors { std::move(src.neighbors) }
-{
-	src.node_id = 0;
-	assert(src.neighbors.empty());
-}
-
-
-// Operators
-
-//Node& Node::operator=(Node const& src)
-//{
-//	if (this != &src)
-//	{
-//		node_id   = src.node_id;
-//		neighbors = src.neighbors;
-//	}
-//
-//	return *this;
-//}
-
-Node& Node::operator=(Node&& src) noexcept
-{
-	if (this != &src)
-	{
-		node_id   = std::move(src.node_id);
-		neighbors = std::move(src.neighbors);
-	}
-
-	src.node_id = 0;
-	assert(neighbors.empty());
-
-	return *this;
-}
-
-bool operator<(Node const& lhs, Node const& rhs)
-{
-	return lhs.node_id < rhs.node_id;
-}
-
-bool operator> (Node const& lhs, Node const& rhs)
-{
-	return rhs < lhs;
-}
-
-bool operator<=(Node const& lhs, Node const& rhs)
-{
-	return !(lhs > rhs);
-}
-
-bool operator>=(Node const& lhs, Node const& rhs)
-{
-	return !(lhs < rhs);
-}
-
-bool operator==(Node const& lhs, Node const& rhs)
-{
-	return lhs.node_id == rhs.node_id;
-}
-
-bool operator!=(Node const& lhs, Node const& rhs)
-{
-	return !(lhs == rhs);
-}
-
-std::ostream& operator<<(std::ostream& os, Node const& src)
-{
-	os << src.node_id;
-
-	return os;
-}
-
-// Functions
-void Node::add_neighbor(size_t const node_id, double const weight)
-{
-	neighbors.emplace_back( Neighbor { node_id, weight } );
-}
-
 // Graph implementation
 
 // Constructors
 
-Graph::Graph(): is_empty { true }, nodes {}
+Graph::Graph(): 
+	nodes        {},
+	is_empty     { true },
+	number_nodes { 0 },
+	number_edges { 0 }
+{}
+
+Graph::Graph(GraphData const& graph_data):
+	nodes        { std::move(graph_data.nodes) },
+	is_empty     { false },
+	is_directed  { graph_data.is_directed  },
+	number_nodes { graph_data.number_nodes },
+	number_edges { graph_data.number_edges }
 {}
 
 Graph::Graph(Graph&& src) noexcept:
-	nodes { std::move(src.nodes) }
+	nodes        { std::move(src.nodes) },
+	is_empty     { src.is_empty },
+	is_directed  { src.is_directed  },
+	number_nodes { src.number_nodes },
+	number_edges { src.number_edges }
 {
 	assert(src.nodes.empty());
 }
@@ -180,3 +41,34 @@ Graph& Graph::operator=(Graph&& src) noexcept
 	return *this;
 
 }
+
+
+void Graph::print() const
+{
+
+	if (is_empty)
+		throw std::logic_error("Graph is empty. There is nothing to print\n");
+	std::string connection;
+
+	if (is_directed)
+	{
+		connection = "arcs";
+	}
+	else
+	{
+		connection = "edges";
+	}
+
+	std::cout << "Graph with " << number_nodes  
+		      << " nodes and " << number_edges << " edges:\n";
+
+	for (size_t i = 0; i < number_nodes; ++i)
+	{
+		std::cout << "{ " 
+			      << nodes[i] 
+				  << " -> " ; 
+		print_vector_brackets(nodes[i].neighbors); 
+		std::cout << "} \n";
+	}
+}
+

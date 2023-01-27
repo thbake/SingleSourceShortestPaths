@@ -1,9 +1,30 @@
-#include "Structures/Graph.h"
+#include "Algorithms/Algorithm.h"
 
-class Dijkstra
-{
-	public:
+namespace Algorithm {
 
-		Dijkstra();
+	namespace Dijkstra {
 
-};
+
+		//ShortestPaths naive_dijkstra(
+
+		//		Graph const& graph, 
+		//		size_t const source_node
+		//		//size_t const sink_node
+		//		);
+
+		ShortestPaths heap_dijkstra (
+
+				Graph const& graph, 
+				size_t const source_node
+				//size_t const sink_node,
+				);
+
+		//ShortestPaths fibonacci_heap_dijkstra(
+
+		//			Graph const& graph,
+		//			size_t const source_node
+		//			//size_t const sink_node
+		//			);
+
+	}
+}

@@ -1,126 +1,60 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
+#include "Data/GraphData.h"
 #include <queue>
-
 
 // Implementation of graph in compressed sparse column format
 // Nonzero entries represent the edges that exist on the between two vertices
 // All node ids are positive integers even if the data represented by the nodes
 // is not numeric.
-class Neighbor
-{
-	public: 
-
-	Neighbor();
-
-	Neighbor(size_t const node_id, double const weight);
-
-	~Neighbor() = default;
-
-	Neighbor(Neighbor const& src) = delete;
-
-	Neighbor(Neighbor&& src) noexcept;
-
-	Neighbor& operator=(Neighbor const& src) = delete;
-
-	Neighbor& operator=(Neighbor&& src) noexcept;
-
-	friend std::ostream& operator<<(std::ostream& os, Neighbor const& src);
-
-	private:
-
-	size_t node_id;
-
-	double weight;
-
-};
-
-
-class Node 
-{
-	friend class GraphData;
-
-	public:
-
-	Node();
-
-	Node(size_t const node_id);
-
-	~Node() = default;
-
-	Node(Node const& src) = delete;
-
-	Node(Node&& src) noexcept;
-
-	Node& operator=(Node const& src) = delete;
-
-	Node& operator=(Node&& src) noexcept;
-
-	friend bool operator< (Node const& lhs, Node const& rhs); 
-
-	friend bool operator> (Node const& lhs, Node const& rhs);
-
-	friend bool operator<=(Node const& lhs, Node const& rhs);
-
-	friend bool operator>=(Node const& lhs, Node const& rhs);
-
-	friend bool operator==(Node const& lhs, Node const& rhs);
-
-	friend bool operator!=(Node const& lhs, Node const& rhs);
-
-	// Return constant reference because otherwise we would copy
-	std::vector<Neighbor>const& get_neighbors() const { return neighbors; };
-
-	void set_id(size_t const id) { node_id = id; }
-
-	void add_neighbor(size_t const node_id, double const weight);
-
-	friend std::ostream& operator<<(std::ostream& os, Node const& src);
-
-	private:
-
-	size_t node_id;
-
-	std::vector<Neighbor> neighbors;
-
-};
-
-
 
 class Graph
 {
-	friend class GraphData;
+	private:
+
+		std::vector<Node> nodes;
 
 	public:
 
-	Graph();
+		Graph();
 
-	~Graph() = default;
+		Graph(GraphData const& graph_data);
 
-	Graph(Graph const& src) = delete;
+		~Graph() = default;
 
-	Graph(Graph&& src) noexcept;
+		Graph(Graph const& src) = delete;
 
-	Graph& operator=(Graph const& src) = delete;
+		Graph(Graph&& src) noexcept;
 
-	Graph& operator=(Graph&& src) noexcept;
+		Graph& operator=(Graph const& src) = delete;
 
-	void BFS(size_t start);
+		Graph& operator=(Graph&& src) noexcept;
 
-	void dijkstra(size_t source, size_t sink);
+		void print() const;
+
 	
-	void heap_dijkstra(size_t source, size_t sink);
+		template<typename T>
+		static void print_vector_brackets(std::vector<T>const& v)
+		{
+			std::cout << "[ ";
 
-	void fibonacci_dijkstra(size_t source, size_t sink);
+			for (size_t i = 0; i < v.size() - 1; ++i)	
+			{
+				std::cout << v[i] << ", " ;
+			}
 
-	void bellman_ford(size_t source, size_t sink);
+			std::cout << v[v.size() - 1] << " ]";
+		}
 
-	bool is_empty;
+		std::vector<Node> const& get_nodes() const { return nodes; }
 
-	private:
+		const bool   is_empty;
+		bool         is_directed;
+		const size_t number_nodes;
+		const size_t number_edges;
 
-	std::vector<Node> nodes;
+		static constexpr double infinity   = std::numeric_limits<double>::max();
+		static constexpr size_t invalid_id = std::numeric_limits<size_t>::max();
+
 
 };

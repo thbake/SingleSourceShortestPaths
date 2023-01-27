@@ -1,28 +1,27 @@
 #pragma once
 
-#include "Structures/Graph.h"
-
+#include "Structures/GraphComponents.h"
 #include <fstream>
-#include <cassert>
 #include <chrono>
+#include <cassert>
 
 class GraphData
 {
+	friend class Graph;
+
 	public:
 
-	Graph graph;
+		GraphData(std::string const& filename, bool const is_directed);
 
-	GraphData(std::string const& filename, bool const is_directed);
+		void read_from_file();
 
-	void read_from_file();
-
-	void print_graph() const;
+		void print_graph() const;
 
 	private:
 
-	std::string       f_name;
-	std::vector<Node> nodes;
-	bool              is_directed;
-	size_t            number_nodes;
-	size_t            number_edges;
+		std::string       f_name;
+		bool              is_directed;
+		size_t            number_nodes;
+		size_t            number_edges;
+		std::vector<Node> nodes;
 };
