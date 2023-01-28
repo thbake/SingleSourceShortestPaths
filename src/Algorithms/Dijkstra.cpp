@@ -44,29 +44,18 @@ ShortestPaths Dijkstra::heap_dijkstra(
 		//size_t const sink_node,
 		)
 {
-	// Initialize potentials, maybe predecessors do not need to be initialized
-	std::vector<double> potentials( graph.number_nodes );
+	// Constructor emulates call of initialize single source
+	ShortestPaths paths(source_node, graph);
 
-	std::vector<Node> predecessors ( graph.number_nodes );
-	
-	// Initialize single source
-	for (size_t i = 0; i < graph.number_nodes; ++i)
-	{
-		potentials[i]   = Graph::infinity;
-		predecessors[i] = Graph::invalid_id;
-	}
-
+	// Initialize min-heap 
 	std::priority_queue<WeightedNode, 
 		                std::vector<WeightedNode>,
 						heap_less>
 						min_heap;
 
-	min_heap.emplace( WeightedNode {source_node, potentials[source_node]} );
-
-	potentials[source_node] = 0;
+	min_heap.emplace( WeightedNode {source_node, paths.distances[source_node]} );
 
 	std::vector<Node> const& graph_nodes = graph.get_nodes();
-
 
 	// Alias constant reference to vector of neighbors
 	using Neighbors = std::vector<Neighbor> const&;
@@ -81,11 +70,9 @@ ShortestPaths Dijkstra::heap_dijkstra(
 
 		for (Neighbor const& neighbor : min_neighbors)
 		{
-			double  minimum_potential  = potentials[minimum.node_id];
+			double  minimum_potential  = paths.distances[minimum.node_id];
 
-			double& neighbor_potential = potentials[neighbor.id()];
-
-			std::cout << minimum.node_id << " " << neighbor << std::endl;
+			double& neighbor_potential = paths.distances[neighbor.id()];
 
 			if (neighbor_potential > minimum_potential + neighbor.weight())
 			{
@@ -93,19 +80,20 @@ ShortestPaths Dijkstra::heap_dijkstra(
 				neighbor_potential = minimum_potential + neighbor.weight();
 
 				// Add predecessor and mark it as true (i.e. valid).
-				predecessors[neighbor.id()] = ( Node { minimum.node_id, true });
+				paths.predecessors[neighbor.id()] = ( 
+
+						Node { minimum.node_id, true }
+
+				);
 
 				// Add neighbor to min_heap
 				min_heap.emplace(WeightedNode { 
-
 						neighbor.id(),
 						neighbor_potential 
 				});
 			}
 		}
 	}
-
-	ShortestPaths paths { source_node, predecessors, potentials };
 
 	return paths;
 }

@@ -3,6 +3,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_library(Algorithms 
 	Algorithms/Algorithm.cpp
 	Algorithms/Dijkstra.cpp
+	Algorithms/BellmanFord.cpp
 	)
 add_library(Data       Data/GraphData.cpp)
 add_library(Structures 

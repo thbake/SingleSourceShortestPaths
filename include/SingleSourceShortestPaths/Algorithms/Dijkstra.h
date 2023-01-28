@@ -12,7 +12,7 @@ namespace Algorithm {
 		//		//size_t const sink_node
 		//		);
 
-		ShortestPaths heap_dijkstra (
+		ShortestPaths heap_dijkstra(
 
 				Graph const& graph, 
 				size_t const source_node
