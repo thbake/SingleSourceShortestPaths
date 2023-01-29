@@ -3,13 +3,27 @@
 #include "Data/GraphData.h"
 #include <queue>
 
-// Implementation of graph in compressed sparse column format
-// Nonzero entries represent the edges that exist on the between two vertices
-// All node ids are positive integers even if the data represented by the nodes
-// is not numeric.
+//class EdgeIterator
+//{
+//	public:
+//
+//		using ValueType     = typename Graph::ValueType;
+//		using PointerType   = ValueType*;
+//		using ReferenceType = ValueType&;
+//
+//		EdgeIterator(PointerType ptr):
+//			memory_pointer { ptr }
+//		{}
+//
+//	private:
+//		PointerType memory_pointer;
+//};
 
 class Graph
 {
+	public:
+		using ValueType = Node;
+
 	private:
 
 		std::vector<Node> nodes;
@@ -32,7 +46,6 @@ class Graph
 
 		void print() const;
 
-	
 		template<typename T>
 		static void print_vector_brackets(std::vector<T>const& v)
 		{
@@ -46,15 +59,16 @@ class Graph
 			std::cout << v[v.size() - 1] << " ]";
 		}
 
-		std::vector<Node> const& get_nodes() const { return nodes; }
+		std::vector<Node> const get_nodes() const { return nodes; }
 
 		const bool   is_empty;
 		bool         is_directed;
 		const size_t number_nodes;
 		const size_t number_edges;
+		const double max_weight;
 
-		static constexpr double infinity   = std::numeric_limits<double>::max();
 		static constexpr size_t invalid_id = std::numeric_limits<size_t>::max();
 
 
 };
+

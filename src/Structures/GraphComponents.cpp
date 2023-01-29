@@ -93,11 +93,10 @@ Node::Node(Node&& src) noexcept:
 	node_id   { std::move(src.node_id) }, 
 	marked    { std::move(src.marked)  },
 	neighbors { std::move(src.neighbors) }
-	//potential { std::move(src.potential) }
 {
+	//std::cout << "I am being moved\n";
 	src.node_id   = 0;
 	src.marked    = false;
-	//src.potential = 0;
 	assert(src.neighbors.empty());
 }
 
@@ -111,7 +110,6 @@ Node& Node::operator=(Node const& src)
 		node_id   = src.node_id;
 		marked    = src.marked;
 		neighbors = src.neighbors;
-		//potential = src.potential;
 	}
 
 	return *this;
@@ -124,12 +122,10 @@ Node& Node::operator=(Node&& src) noexcept
 		node_id   = std::move(src.node_id);
 		marked    = std::move(src.marked);
 		neighbors = std::move(src.neighbors);
-		//potential = std::move(src.potential);
 	}
 
 	src.node_id   = 0;
 	src.marked    = false;
-	//src.potential = 0;
 
 	assert(neighbors.empty());
 

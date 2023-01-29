@@ -24,4 +24,5 @@ class GraphData
 		size_t            number_nodes;
 		size_t            number_edges;
 		std::vector<Node> nodes;
+		double            max_weight;
 };

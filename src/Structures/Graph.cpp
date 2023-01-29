@@ -8,7 +8,8 @@ Graph::Graph():
 	nodes        {},
 	is_empty     { true },
 	number_nodes { 0 },
-	number_edges { 0 }
+	number_edges { 0 },
+	max_weight   { 0.0 }
 {}
 
 Graph::Graph(GraphData const& graph_data):
@@ -16,24 +17,28 @@ Graph::Graph(GraphData const& graph_data):
 	is_empty     { false },
 	is_directed  { graph_data.is_directed  },
 	number_nodes { graph_data.number_nodes },
-	number_edges { graph_data.number_edges }
+	number_edges { graph_data.number_edges },
+	max_weight   { graph_data.max_weight   }
 {}
 
 Graph::Graph(Graph&& src) noexcept:
 	nodes        { std::move(src.nodes) },
-	is_empty     { src.is_empty },
+	is_empty     { src.is_empty     },
 	is_directed  { src.is_directed  },
 	number_nodes { src.number_nodes },
-	number_edges { src.number_edges }
+	number_edges { src.number_edges },
+	max_weight   { src.max_weight   }
 {
 	assert(src.nodes.empty());
+	std::cout << "I am being moved\n";
 }
 
 Graph& Graph::operator=(Graph&& src) noexcept
 {
 	if (this != &src)
 	{
-		nodes = std::move(src.nodes);
+		nodes        = std::move(src.nodes);
+		is_directed  =  src.is_directed ;
 	}
 
 	assert(nodes.empty());

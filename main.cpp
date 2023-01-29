@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Algorithms/Algorithm.h"
+#include "Algorithms/BellmanFord.h"
 #include "Algorithms/Dijkstra.h"
 	
 int main(int argc, char const* const* const argv)
@@ -19,17 +20,27 @@ int main(int argc, char const* const* const argv)
 	size_t sink   = std::stoul(argv[3]) - 1;
 
 	// IMPORTANT: differentiate between directed and undirected graphs
-	GraphData data(filename, false);
+	GraphData data(filename, true);
 
 	data.read_from_file();
 
 	Graph graph(data);
 
-	graph.print();
+	//graph.print();
 
-	Algorithm::ShortestPaths paths = Algorithm::Dijkstra::heap_dijkstra(graph, source);
+	Algorithm::ShortestPaths paths = Algorithm::Dijkstra::heap_dijkstra(source, graph);
 
 	Algorithm::output_shortest_path(paths, sink);
+
+	Algorithm::ShortestPaths paths_bellman { source, graph };
+
+
+	bool no_negative_cycle = Algorithm::BellmanFord::bellman_ford(graph, paths_bellman);
+
+	std::cout << "No negative cycles?\n"; 
+	std::cout << no_negative_cycle << std::endl;
+
+	Algorithm::output_shortest_path(paths_bellman, sink);
 
 
 	

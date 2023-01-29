@@ -31,7 +31,7 @@ void GraphData::read_from_file()
 	size_t head_id;
 	double weight;
 
-	double max_weight = 0;
+	max_weight = 0.0;
 
 	for (size_t i = 0; i < number_edges; ++i)
 	{

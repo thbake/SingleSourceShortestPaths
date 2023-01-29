@@ -2,10 +2,14 @@
 
 #include "Algorithms/Algorithm.h"
 
-namespace Algortihm {
+namespace Algorithm {
 
 	namespace BellmanFord {
 
-		//ShortestPaths bellman_ford()
+		bool bellman_ford(
+
+				Graph const&   graph,
+				ShortestPaths& paths);
+
 	}
 }

@@ -7,23 +7,7 @@
 using namespace Algorithm;
 
 
-struct WeightedNode 
-{
-	WeightedNode(size_t const id, double const potential):
-		node_id { id }, node_potential { potential }
-	{}
 
-	size_t node_id;
-	double node_potential;
-};
-
-struct heap_less
-{
-	constexpr bool operator()(WeightedNode const& v, WeightedNode const& w) const
-	{
-		return v.node_potential > w.node_potential;
-	}
-};
 
 //ShortestPaths Dijkstra::naive_dijkstra(
 //
@@ -37,15 +21,10 @@ struct heap_less
 //	
 //}
 
-ShortestPaths Dijkstra::heap_dijkstra(
-
-		Graph const& graph, 
-		size_t const source_node
-		//size_t const sink_node,
-		)
+ShortestPaths Dijkstra::heap_dijkstra(size_t const source, Graph const& graph)
 {
 	// Constructor emulates call of initialize single source
-	ShortestPaths paths(source_node, graph);
+	ShortestPaths paths(source, graph);
 
 	// Initialize min-heap 
 	std::priority_queue<WeightedNode, 
@@ -53,7 +32,7 @@ ShortestPaths Dijkstra::heap_dijkstra(
 						heap_less>
 						min_heap;
 
-	min_heap.emplace( WeightedNode {source_node, paths.distances[source_node]} );
+	min_heap.emplace( WeightedNode {source, paths.distances[source]} );
 
 	std::vector<Node> const& graph_nodes = graph.get_nodes();
 
@@ -70,7 +49,10 @@ ShortestPaths Dijkstra::heap_dijkstra(
 
 		for (Neighbor const& neighbor : min_neighbors)
 		{
-			double  minimum_potential  = paths.distances[minimum.node_id];
+
+			//paths.relax(minimum, neighbor, neighbor.weight(), min_heap);
+
+			double  minimum_potential  = paths.distances[minimum.id()];
 
 			double& neighbor_potential = paths.distances[neighbor.id()];
 
@@ -82,7 +64,7 @@ ShortestPaths Dijkstra::heap_dijkstra(
 				// Add predecessor and mark it as true (i.e. valid).
 				paths.predecessors[neighbor.id()] = ( 
 
-						Node { minimum.node_id, true }
+						Node { minimum.id(), true }
 
 				);
 
@@ -92,7 +74,7 @@ ShortestPaths Dijkstra::heap_dijkstra(
 						neighbor_potential 
 				});
 			}
-		}
+		};
 	}
 
 	return paths;
