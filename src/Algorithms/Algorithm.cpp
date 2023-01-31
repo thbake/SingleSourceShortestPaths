@@ -21,8 +21,6 @@ void Algorithm::output_shortest_path(
 		++predecessor;
 		
 		reverse_sink_path.push_back(predecessor);
-
-		
 	}
 
 	std::reverse(reverse_sink_path.begin(), reverse_sink_path.end());
@@ -33,12 +31,11 @@ void Algorithm::output_shortest_path(
 			  << sink_id  + 1
 			  << " is : \n";
 
-	//Graph::print_vector_brackets(reverse_sink_path);
-	std::cout << reverse_sink_path.size() << "\n";
 	for (auto &element: reverse_sink_path)
 	{
 		std::cout << element << " ";
 	}
 	std::cout << "\n";
+	std::cout << "and has cost " << paths.distances[sink_id] << "\n\n";
 			
 }

@@ -20,7 +20,7 @@ int main(int argc, char const* const* const argv)
 	size_t sink   = std::stoul(argv[3]) - 1;
 
 	// IMPORTANT: differentiate between directed and undirected graphs
-	GraphData data(filename, true);
+	GraphData data(filename, false);
 
 	data.read_from_file();
 
@@ -28,19 +28,22 @@ int main(int argc, char const* const* const argv)
 
 	//graph.print();
 
-	Algorithm::ShortestPaths paths = Algorithm::Dijkstra::heap_dijkstra(source, graph);
-
-	Algorithm::output_shortest_path(paths, sink);
-
-	Algorithm::ShortestPaths paths_bellman { source, graph };
+	Algorithm::ShortestPaths paths_dijkstra       { source, graph };
+	Algorithm::ShortestPaths paths_bellman        { source, graph };
+	Algorithm::ShortestPaths paths_naive_dijkstra { source, graph };
 
 
+	Algorithm::Dijkstra::heap_dijkstra(source, graph, paths_dijkstra);
+	Algorithm::Dijkstra::naive_dijkstra(graph, source, paths_naive_dijkstra);
 	bool no_negative_cycle = Algorithm::BellmanFord::bellman_ford(graph, paths_bellman);
 
 	std::cout << "No negative cycles?\n"; 
 	std::cout << no_negative_cycle << std::endl;
 
-	Algorithm::output_shortest_path(paths_bellman, sink);
+
+	Algorithm::output_shortest_path(paths_dijkstra,       sink);
+	Algorithm::output_shortest_path(paths_bellman,        sink);
+	Algorithm::output_shortest_path(paths_naive_dijkstra, sink);
 
 
 	

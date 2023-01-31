@@ -5,14 +5,17 @@ namespace Algorithm {
 	namespace Dijkstra {
 
 
-		//ShortestPaths naive_dijkstra(
+		void naive_dijkstra(
 
-		//		Graph const& graph, 
-		//		size_t const source_node
-		//		//size_t const sink_node
-		//		);
+				Graph const&   graph, 
+				size_t const   source_node,
+				ShortestPaths& paths
+				);
 
-		ShortestPaths heap_dijkstra(size_t const source, Graph const& graph);
+		void heap_dijkstra(
+				size_t const   source,
+				Graph const&   graph,
+				ShortestPaths& paths);
 
 		//ShortestPaths fibonacci_heap_dijkstra(
 

@@ -32,9 +32,8 @@ namespace Algorithm {
 		// Initialize single source
 		ShortestPaths(size_t const source_id, Graph const& graph):
 			source       { source_id },
-			infinity     {std::numeric_limits<double>::max()},
 			predecessors ( graph.number_nodes, Graph::invalid_id ),
-			distances    ( graph.number_nodes, infinity   ),
+			distances    ( graph.number_nodes, Graph::infinity   ),
 			total_weight { 0.0 }
 		{
 			distances[source_id] = 0.0;
@@ -58,14 +57,10 @@ namespace Algorithm {
 		}
 
 		size_t              source;
-		const double infinity;   
 		std::vector<Node>   predecessors;
 		std::vector<double> distances;
 		double              total_weight;
 	};
-
-
-
 
 	void output_shortest_path(ShortestPaths const& path, size_t const sink_id);
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Data/GraphData.h"
-#include <queue>
 
 //class EdgeIterator
 //{
@@ -68,6 +67,7 @@ class Graph
 		const double max_weight;
 
 		static constexpr size_t invalid_id = std::numeric_limits<size_t>::max();
+		static constexpr double infinity   = std::numeric_limits<double>::max();
 
 
 };

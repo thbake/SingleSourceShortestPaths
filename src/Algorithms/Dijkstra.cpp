@@ -1,30 +1,113 @@
 #include "Algorithms/Dijkstra.h"
 #include "Algorithms/Algorithm.h"
 
-#include <queue>
 #include <limits>
+#include <queue>
 
 using namespace Algorithm;
 
-
-
-
-//ShortestPaths Dijkstra::naive_dijkstra(
-//
-//		Graph const& graph,
-//		size_t const source_node
-//		//size_t const sink_node,
-//		)
+//size_t compute_minimizer(
+//		ShortestPaths const& paths,
+//		std::vector<bool>& container
+//	)
 //{
+//	double minimum   = Graph::infinity;
+//	size_t minimizer = Graph::invalid_id;
 //
-//	std::vector<Node> predecessors;
-//	
+//	assert(paths.distances.size() == container.size());
+//
+//	for (size_t i = 0; i < container.size(); ++i)
+//	{
+//		if (container[i] != true)
+//		{
+//			if (paths.distances[i] < minimum)
+//			{
+//				minimum   = paths.distances[i];
+//				minimizer = i;
+//				std::cout << minimizer << std::endl;
+//			}
+//		}
+//	}
+//	std::cout << minimum << std::endl;
+//	std::cout << minimizer << std::endl;
+//
+//	assert(minimizer < container.size());
+//
+//	container[minimizer] = true; 
+//
+//	return minimizer;
+//
 //}
-
-ShortestPaths Dijkstra::heap_dijkstra(size_t const source, Graph const& graph)
+size_t compute_minimizer(std::vector<double>& distances, std::vector<bool>& container)
 {
-	// Constructor emulates call of initialize single source
-	ShortestPaths paths(source, graph);
+    double min       = Graph::infinity;
+    size_t minimizer = Graph::invalid_id - 100;
+
+    assert(distances.size() == container.size());
+    
+    for (size_t i = 0; i < container.size(); ++i)
+    {
+        if (container[i] != true)
+        {
+            if (distances[i] < min)
+            {
+                min       = distances[i];
+                minimizer = i;
+            }
+        }
+    }
+    
+    container[minimizer] = true;
+    
+    return minimizer;
+}
+
+void Dijkstra::naive_dijkstra(
+
+		Graph const&   graph,
+		size_t const   source_node,
+		ShortestPaths& paths)
+{
+	using Neighbors = std::vector<Neighbor> const&;
+
+	std::vector<Node> const& graph_nodes = graph.get_nodes();
+
+
+	// Initialize vector to perform bookeeping of set of visited nodes
+	std::vector<bool> node_ids( graph.number_nodes, false );
+
+	size_t set_counter = 0;
+
+	while (set_counter < graph.number_nodes)
+	{
+		size_t minimizer = compute_minimizer(paths.distances, node_ids);
+
+		set_counter += 1;
+
+		Node minimizer_node = graph_nodes[minimizer];	
+
+		Neighbors neighbors = minimizer_node.get_neighbors();
+
+		for (auto const& neighbor : graph_nodes[minimizer].get_neighbors())
+		{
+			double  minimizer_potential = paths.distances[minimizer];
+			double& neighbor_potential  = paths.distances[neighbor.id()];
+
+			if (neighbor_potential > minimizer_potential + neighbor.weight())
+			{
+				neighbor_potential = minimizer_potential + neighbor.weight();
+
+				paths.predecessors[neighbor.id()] = Node { minimizer, true };
+			}
+		}
+	}
+}
+
+void Dijkstra::heap_dijkstra(
+		size_t const   source,
+		Graph const&   graph,
+		ShortestPaths& paths)
+{
 
 	// Initialize min-heap 
 	std::priority_queue<WeightedNode, 
@@ -76,8 +159,6 @@ ShortestPaths Dijkstra::heap_dijkstra(size_t const source, Graph const& graph)
 			}
 		};
 	}
-
-	return paths;
 }
 
 //ShortestPaths Dijkstra::fibonacci_heap_dijkstra(

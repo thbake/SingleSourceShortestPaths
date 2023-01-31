@@ -6,10 +6,7 @@ namespace Algorithm {
 
 	namespace BellmanFord {
 
-		bool bellman_ford(
-
-				Graph const&   graph,
-				ShortestPaths& paths);
+		bool bellman_ford(Graph const& graph, ShortestPaths& paths);
 
 	}
 }
