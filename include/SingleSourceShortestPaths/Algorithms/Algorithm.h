@@ -3,6 +3,7 @@
 #include "Structures/Graph.h"
 #include <algorithm>
 #include <limits>
+#include <queue>
 
 namespace Algorithm {
 

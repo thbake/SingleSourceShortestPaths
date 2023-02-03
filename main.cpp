@@ -31,11 +31,13 @@ int main(int argc, char const* const* const argv)
 	Algorithm::ShortestPaths paths_dijkstra       { source, graph };
 	Algorithm::ShortestPaths paths_bellman        { source, graph };
 	Algorithm::ShortestPaths paths_naive_dijkstra { source, graph };
+	Algorithm::ShortestPaths paths_bellman_faster { source, graph };
 
 
-	Algorithm::Dijkstra::heap_dijkstra(source, graph, paths_dijkstra);
-	Algorithm::Dijkstra::naive_dijkstra(graph, source, paths_naive_dijkstra);
+	Algorithm::Dijkstra::heap_dijkstra(graph, paths_dijkstra);
+	Algorithm::Dijkstra::naive_dijkstra(graph, paths_naive_dijkstra);
 	bool no_negative_cycle = Algorithm::BellmanFord::bellman_ford(graph, paths_bellman);
+	bool no_neg_faster = Algorithm::BellmanFord::bellman_ford_faster(graph, paths_bellman_faster);
 
 	std::cout << "No negative cycles?\n"; 
 	std::cout << no_negative_cycle << std::endl;
@@ -44,6 +46,7 @@ int main(int argc, char const* const* const argv)
 	Algorithm::output_shortest_path(paths_dijkstra,       sink);
 	Algorithm::output_shortest_path(paths_bellman,        sink);
 	Algorithm::output_shortest_path(paths_naive_dijkstra, sink);
+	Algorithm::output_shortest_path(paths_bellman_faster, sink);
 
 
 	
