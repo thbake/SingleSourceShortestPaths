@@ -63,7 +63,22 @@ namespace Algorithm {
 		double              total_weight;
 	};
 
-	void output_shortest_path(ShortestPaths const& path, size_t const sink_id);
+	//namespace Dijkstra {
+
+	void naive_dijkstra(Graph const& graph, ShortestPaths& paths);
+
+	void heap_dijkstra(Graph const& graph, ShortestPaths& paths);
+
+	//}
+
+//	namespace BellmanFord {
+
+	bool bellman_ford(Graph const& graph, ShortestPaths& paths);
+
+	// Implements Shortest Path Faster Algorithm
+	void bellman_ford_faster(Graph const& graph, ShortestPaths& paths);
+
 }
+//}
 
 

@@ -20,6 +20,11 @@ add_subdirectory(src)
 # The executable library code is here
 add_executable(shortest_paths main.cpp)
 
+# If this line is not included linking process will fail to resolve the symbols 
+# defined in Algorithm.cpp as they are not part of libData.a which is used in 
+# Output.cpp
+target_link_libraries(Data PRIVATE Algorithms)
+
 target_link_libraries(shortest_paths
 	PUBLIC Algorithms
 	PUBLIC Data
