@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(SingleSourceShortestPaths LANGUAGES CXX)
 
+set(CMAKE_SOURCE_DIR ./)
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -28,7 +30,16 @@ target_link_libraries(Data PRIVATE Algorithms)
 target_link_libraries(shortest_paths
 	PUBLIC Algorithms
 	PUBLIC Data
+	PUBLIC Experiment
 	PUBLIC Structures
 	)
 
+#file(GLOB_RECURSE build_files "${CMAKE_BINARY_DIR}/*")
+#file(REMOVE_RECURSE ${build_files})
+#file(REMOVE ${CMAKE_BINARY_DIR}./cache)
+
+add_custom_target(clean_build
+	COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}
+	COMMAND ${CMAKE_COMMAND} -E make_directory   ${CMAKE_BINARY_DIR}
+)
 

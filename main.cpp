@@ -1,15 +1,19 @@
 #include <iostream>
 #include <getopt.h>
 
-#include "Algorithms/Algorithm.h"
 #include "Data/Output.h"
 	
 int main(int argc, char** argv)
 {
 
 	constexpr char const* const options = "a:h:";
-	constexpr char const* const usage = "[options]\n"\
-		" -a n Choose algorithm: 1 = Naive Dijkstra, 2  = Min-Heap Dijkstra, 3 = Bellman-Ford, 4 = Shortest Paths Faster\n"\
+	constexpr char const* const usage = "[options]\n\n"\
+		" -a n Run experiment or choose algorithm:\n"\
+		"      1 = Run experiment       \n"\ 
+		"      2 = Naive dijkstra       \n"\
+		"      3 = Min-Heap Dijkstra    \n"\
+		"      4 = Bellman-Ford         \n"\
+		"      5 = Shortest Paths Faster\n\n"\
 		" -h   Show this help\n" \
 		" -o name of graph instance to be processed with sink and source nodes\n\n";
 
@@ -42,7 +46,6 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	std::cout << "Hello " << argv[1] << std::endl;
 	filename = argv[3];
 	size_t source = std::stoul(argv[4]) - 1;
 	size_t sink   = std::stoul(argv[5]) - 1;
@@ -60,25 +63,5 @@ int main(int argc, char** argv)
 	Algorithm::ShortestPaths paths = output.compute_shortest_path(graph);
 
 	output.output_shortest_paths(paths);
-
-	//Algorithm::ShortestPaths paths_dijkstra       { source, graph };
-	//Algorithm::ShortestPaths paths_bellman        { source, graph };
-	//Algorithm::ShortestPaths paths_naive_dijkstra { source, graph };
-	//Algorithm::ShortestPaths paths_bellman_faster { source, graph };
-
-
-	//Algorithm::Dijkstra::heap_dijkstra(graph, paths_dijkstra);
-	//Algorithm::Dijkstra::naive_dijkstra(graph, paths_naive_dijkstra);
-	//bool no_negative_cycle = Algorithm::BellmanFord::bellman_ford(graph, paths_bellman);
-	//Algorithm::BellmanFord::bellman_ford_faster(graph, paths_bellman_faster);
-
-	//Algorithm::output_shortest_path(paths_dijkstra,       sink);
-	//Algorithm::output_shortest_path(paths_bellman,        sink);
-	//Algorithm::output_shortest_path(paths_naive_dijkstra, sink);
-	//Algorithm::output_shortest_path(paths_bellman_faster, sink);
-
-
-	
-
 
 }

@@ -1,4 +1,5 @@
 #include "Data/Output.h"
+#include <iomanip>
 
 using std::chrono::time_point;
 using std::chrono::high_resolution_clock;
@@ -27,12 +28,18 @@ Algorithm::ShortestPaths Output::compute_shortest_path(Graph const& graph)
 	time_point<high_resolution_clock> start;
 	time_point<high_resolution_clock> end;
 
+	std::cout << "\n";
+
 	switch(algorithm)
 	{
 		case 1:
 		{
 			std::cout << "Single source shortest paths computation with " \
-				"naive Dijkstra\n";
+				"naive Dijkstra:\n";
+
+			std::cout << "=============================================="\
+				"================\n";
+
 			start = high_resolution_clock::now();
 
 			Algorithm::naive_dijkstra(graph, paths);
@@ -45,7 +52,11 @@ Algorithm::ShortestPaths Output::compute_shortest_path(Graph const& graph)
 		case 2:
 		{
 			std::cout << "Single source shortest paths computation with "\
-				"Min-Heap Dijkstra\n";
+				"Min-Heap Dijkstra:\n";
+
+			std::cout << "=============================================="\
+				"==================\n";
+
 			start = high_resolution_clock::now();
 
 			Algorithm::heap_dijkstra(graph, paths);
@@ -58,7 +69,10 @@ Algorithm::ShortestPaths Output::compute_shortest_path(Graph const& graph)
 		case 3:
 		{
 			std::cout << "Single source shortest paths computation with "\
-				"Bellman-Ford\n";
+				"Bellman-Ford:\n";
+
+			std::cout << "=============================================="\
+				"=============\n";
 
 			start = high_resolution_clock::now();
 
@@ -72,7 +86,11 @@ Algorithm::ShortestPaths Output::compute_shortest_path(Graph const& graph)
 		case 4:
 		{
 			std::cout << "Single source shortest paths computation with "\
-				"Shortest Paths Faster\n";
+				"Shortest Paths Faster:\n";
+
+
+			std::cout << "=============================================="\
+				"======================\n";
 
 			start = high_resolution_clock::now();
 
@@ -83,6 +101,8 @@ Algorithm::ShortestPaths Output::compute_shortest_path(Graph const& graph)
 			break;
 		}
 	}
+
+	std::cout << "\n";
 
 	total_duration = (end - start) + init_duration_ms;
 
@@ -109,7 +129,7 @@ void Output::output_shortest_paths(Algorithm::ShortestPaths const& paths)
 
 	std::reverse(reverse_sink_path.begin(), reverse_sink_path.end());
 
-	std::cout << "Shortest path from " 
+	std::cout << "\nShortest path from " 
 		      << paths.source + 1
 			  << " to " 
 			  << sink_id  + 1
@@ -119,7 +139,12 @@ void Output::output_shortest_paths(Algorithm::ShortestPaths const& paths)
 	{
 		std::cout << element << " ";
 	}
-	std::cout << "\n";
+	std::cout << "\n\n";
 	std::cout << "and has cost " << paths.distances[sink_id] << "\n\n";
+
+	std::cout << "Computation done in " 
+		<< std::setw(10) << std::setprecision(5)
+	    << total_duration.count()
+	    << "ms\n";
 			
 }
