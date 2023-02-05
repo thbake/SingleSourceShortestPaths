@@ -5,6 +5,7 @@ add_library(Algorithms
 	)
 add_library(Data       
 	Data/GraphData.cpp
+	Data/Input.cpp
 	Data/Output.cpp
 	)
 add_library(Experiment

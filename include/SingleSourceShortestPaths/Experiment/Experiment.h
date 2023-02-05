@@ -1,4 +1,5 @@
-#include "Algorithms/Algorithm.h"
+#pragma once
+
 #include "Data/Output.h"
 #include <chrono>
 #include <random>
@@ -17,7 +18,11 @@ class Experiment
 {
 	public:
 
-		Experiment(size_t const random_source, size_t const random_sink);
+		Experiment(
+			size_t const source,
+			size_t const sink,
+			size_t const runs
+		);
 
 		~Experiment() = default;
 
@@ -32,6 +37,7 @@ class Experiment
 
 		size_t source;
 		size_t sink;
+		size_t experiment_runs;
 		std::vector<double> average_times;
 		
 	
@@ -42,7 +48,6 @@ class Experiment
 			using duration_ms = std::chrono::duration<double, std::milli>;
 			using TimePoint = std::chrono::time_point<high_resolution_clock>;
 			
-
 			auto const init_start = high_resolution_clock::now();
 
 			// Generic initialization of all single source shortest paths algorithms
@@ -51,7 +56,6 @@ class Experiment
 			auto const init_end   = high_resolution_clock::now();
 
 			duration_ms init_duration = init_end - init_start;
-
 
 			TimePoint start =  high_resolution_clock::now();
 

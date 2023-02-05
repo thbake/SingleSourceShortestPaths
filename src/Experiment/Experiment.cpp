@@ -24,22 +24,25 @@ RandomNodes::RandomNodes(Graph const& graph): random_source {0}, random_sink { 0
 	random_sink   = graph_nodes[distribution(generator)].id();
 }
 
-Experiment::Experiment(size_t const random_source, size_t const random_sink): 
-	source { random_source },
-	sink   { random_sink   },
-	average_times ( 4, 0.0 )
+Experiment::Experiment(
+	size_t const source,
+	size_t const sink,
+	size_t const runs
+): 
 
+	source          { source },
+	sink            { sink   },
+	experiment_runs { runs   },
+	average_times ( 4, 0.0 )
 {}
 
 void Experiment::run_experiment(Graph const& graph)
 {
-	// Run experiment 10 times (maybe I'll give the option of changing number)
-	
 	using duration_ms = std::chrono::duration<double, std::milli>;
 
 	std::vector<duration_ms> algo_means (4, std::chrono::milliseconds { 0 });
 
-	for (size_t i = 0; i < 10; ++i)
+	for (size_t i = 0; i < experiment_runs; ++i)
 	{
 		algo_means[0] += measure_algorithm(Algorithm::naive_dijkstra, graph);
 
@@ -57,7 +60,7 @@ void Experiment::run_experiment(Graph const& graph)
 	{
 			for (size_t i = 0; i < durations.size(); ++i)
 			{
-				average_times[i] = (durations[i] / 10).count();
+				average_times[i] = (durations[i] / experiment_runs).count();
 			}
 	};
 
