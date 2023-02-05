@@ -40,6 +40,12 @@ namespace Algorithm {
 			distances[source_id] = 0.0;
 		}
 
+		void reset()
+		{
+			std::fill(predecessors.begin(), predecessors.end(), Graph::invalid_id);
+			std::fill(distances.begin(), distances.end(), Graph::infinity);
+		}
+
 		// For now not used
 		void relax(WeightedNode const& in_node, Neighbor const& out_node, double weight)
 		{
@@ -63,15 +69,9 @@ namespace Algorithm {
 		double              total_weight;
 	};
 
-	//namespace Dijkstra {
-
 	void naive_dijkstra(Graph const& graph, ShortestPaths& paths);
 
 	void heap_dijkstra(Graph const& graph, ShortestPaths& paths);
-
-	//}
-
-//	namespace BellmanFord {
 
 	bool bellman_ford(Graph const& graph, ShortestPaths& paths);
 
@@ -79,6 +79,3 @@ namespace Algorithm {
 	void bellman_ford_faster(Graph const& graph, ShortestPaths& paths);
 
 }
-//}
-
-

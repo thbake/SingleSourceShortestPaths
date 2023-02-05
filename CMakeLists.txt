@@ -26,6 +26,7 @@ add_executable(shortest_paths main.cpp)
 # defined in Algorithm.cpp as they are not part of libData.a which is used in 
 # Output.cpp
 target_link_libraries(Data PRIVATE Algorithms)
+target_link_libraries(Experiment PRIVATE Data)
 
 target_link_libraries(shortest_paths
 	PUBLIC Algorithms
@@ -37,9 +38,9 @@ target_link_libraries(shortest_paths
 #file(GLOB_RECURSE build_files "${CMAKE_BINARY_DIR}/*")
 #file(REMOVE_RECURSE ${build_files})
 #file(REMOVE ${CMAKE_BINARY_DIR}./cache)
-
-add_custom_target(clean_build
-	COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}
-	COMMAND ${CMAKE_COMMAND} -E make_directory   ${CMAKE_BINARY_DIR}
-)
+#
+#add_custom_target(clean_build
+#	COMMAND ${CMAKE_COMMAND} -E remove_directory ${build_files}
+#	COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/.cache
+#)
 
