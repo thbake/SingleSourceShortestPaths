@@ -142,10 +142,12 @@ void Output::output_shortest_paths(Algorithm::ShortestPaths const& paths)
 	std::cout << "\n\n";
 	std::cout << "and has cost " << paths.distances[sink_id] << "\n\n";
 
+	std::cout.setf(std::ios_base::scientific);
+
 	std::cout << "Computation done in " 
 		<< std::setw(10) << std::setprecision(5)
 	    << total_duration.count()
-	    << "ms\n";
+	    << " ms\n";
 			
 }
 

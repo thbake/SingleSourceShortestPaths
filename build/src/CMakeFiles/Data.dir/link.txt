@@ -1,2 +1,0 @@
-/usr/bin/ar qc libData.a CMakeFiles/Data.dir/Data/GraphData.cpp.o CMakeFiles/Data.dir/Data/Input.cpp.o CMakeFiles/Data.dir/Data/Output.cpp.o
-/usr/bin/ranlib libData.a
