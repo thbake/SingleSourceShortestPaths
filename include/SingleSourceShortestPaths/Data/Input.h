@@ -31,9 +31,9 @@ class Input
 
 		Input& operator=(Input const& src) = delete;
 
-		static void parse_experiment_parameters();
+		static void parse_experiment_parameters(std::string const& filename);
 		
-		static void parse_algorithm_parameters();
+		static void parse_algorithm_parameters(std::string const& filename);
 
 		void initialize();
 

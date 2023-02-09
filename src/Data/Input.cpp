@@ -50,11 +50,13 @@ Input::Input(
 	algorithm { algorithm }
 {}
 
-void Input::parse_experiment_parameters()
+void Input::parse_experiment_parameters(std::string const& filename)
 {
 	std::cout << "To run the experiment provide\n\n"
-			  << "1) ../graph_instances/FILENAME.gph source sink number_runs, to run with source and sink or\n\n"
-			  << "2) ../graph_instances/FILENAME.gph number_runs, to run with randomly selected source and sink\n\n";
+
+			  << "    1) SOURCE SINK NUMBER_RUNS, to run with given source and sink or\n\n"
+
+			  << "    2) NUMBER_RUNS, to run with randomly selected source and sink\n\n";
 
 	size_t argc = 0;
 
@@ -66,44 +68,30 @@ void Input::parse_experiment_parameters()
 	
 	std::string parameter;
 
-	std::vector<std::string> parameters(4);
+	std::vector<std::string> parameters(3);
 	
-	while (argc < 5 && (stream >> parameter))
+	while (argc < 3 && (stream >> parameter))
 	{
 		parameters[argc] = parameter;	
 
 		++argc;
 	}
 
-	if (argc == 4) 
+	if (argc == 3) 
 	{
-		std::string filename   = parameters[0]; 
-
-		if (not std::filesystem::exists(filename))
-		{
-			throw std::logic_error("File " + filename + " is not on ../graph_instaces/");
-		}
-
-		size_t source_id       = std::stoul(parameters[1]) - 1;
-		size_t sink_id         = std::stoul(parameters[2]) - 1 ;
-		size_t experiment_runs = std::stoul(parameters[3]);
+		size_t source_id       = std::stoul(parameters[0]) - 1;
+		size_t sink_id         = std::stoul(parameters[1]) - 1 ;
+		size_t experiment_runs = std::stoul(parameters[2]);
 
 
-		Input input {filename, source_id, sink_id, experiment_runs };
+		Input input { filename, source_id, sink_id, experiment_runs };
 		input.initialize();
 	}
 
 	// Run experiment with randomly selected nodes
-	else if (argc == 2)
+	else if (argc == 1)
 	{
-		std::string filename   = parameters[0]; 
-
-		if (not std::filesystem::exists(filename))
-		{
-			throw std::logic_error("File " + filename + " is not on ../graph_instaces/");
-		}
-
-		size_t experiment_runs = std::stoul(parameters[1]);
+		size_t experiment_runs = std::stoul(parameters[0]);
 
 		Input input {filename , experiment_runs};
 
@@ -115,15 +103,18 @@ void Input::parse_experiment_parameters()
 	}
 }
 
-void Input::parse_algorithm_parameters()
+void Input::parse_algorithm_parameters(std::string const& filename)
 {
-	std::cout << "To run the algorithms individually provide\n "
-			  << "../graph_instances/FILENAME.gph source sink algorithm\n\n"
-			  << "Options for the algorithms are: \n"
-			  << "1: Naive Dijkstra\n"
-			  << "2: Min-Heap Dijkstra\n"
-			  << "3: Bellman-Ford\n"
-			  << "4: Shortest Paths Faster\n";
+	std::cout << "To run the algorithms individually provide\n\n"
+
+			  << "    SOURCE SINK ALGORITHM\n\n"
+
+			  << "    Options for the algorithms are: \n\n"
+
+			  << "        1: Naive Dijkstra\n"
+			  << "        2: Min-Heap Dijkstra\n"
+			  << "        3: Bellman-Ford\n"
+			  << "        4: Shortest Paths Faster\n\n";
 
 	size_t argc = 0;
 
@@ -135,27 +126,20 @@ void Input::parse_algorithm_parameters()
 	
 	std::string parameter;
 
-	std::vector<std::string> parameters(4);
+	std::vector<std::string> parameters(3);
 	
-	while (argc < 5 && (stream >> parameter))
+	while (argc < 4 && (stream >> parameter))
 	{
 		parameters[argc] = parameter;	
 
 		++argc;
 	}
 
-	if (argc == 4)
+	if (argc == 3)
 	{
-		std::string filename   = parameters[0]; 
-
-		if (not std::filesystem::exists(filename))
-		{
-			throw std::logic_error("File " + filename + " is not on ../graph_instaces/");
-		}
-
-		size_t source    = stoul(parameters[1]) - 1;
-		size_t sink      = stoul(parameters[2]) - 1;
-		int algorithm    = stoi(parameters[3]);
+		size_t source    = stoul(parameters[0]) - 1;
+		size_t sink      = stoul(parameters[1]) - 1;
+		int algorithm    = stoi(parameters[2]);
 
 		if ( (algorithm > 5) or (algorithm < 1))
 		{
@@ -197,7 +181,7 @@ void Input::initialize()
 		{
 			std::cout << "Running experiment on graph " + filename + " with "
 				      << "given source and sink nodes: "
-				      << source << " " << sink << "\n\n";
+				      << source + 1<< " " << sink + 1<< "\n\n";
 
 			Experiment experiment { source, sink, experiment_runs };
 
@@ -212,9 +196,9 @@ void Input::initialize()
 
 			std::cout << "Running experiment on graph " + filename + " with " 
 				      << "randomly selected source and sink nodes: " 
-				      << random.random_source 
+				      << random.random_source + 1
 					  << " " 
-					  << random.random_sink << "\n";
+					  << random.random_sink   + 1 << "\n";
 
 			Experiment experiment 
 			{ 

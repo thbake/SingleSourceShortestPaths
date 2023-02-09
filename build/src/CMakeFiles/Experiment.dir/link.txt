@@ -1,0 +1,2 @@
+/usr/bin/ar qc libExperiment.a CMakeFiles/Experiment.dir/Experiment/Experiment.cpp.o
+/usr/bin/ranlib libExperiment.a

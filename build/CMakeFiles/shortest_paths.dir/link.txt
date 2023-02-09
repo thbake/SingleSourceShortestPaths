@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/shortest_paths.dir/main.cpp.o -o shortest_paths  src/libAlgorithms.a src/libData.a src/libExperiment.a src/libStructures.a src/libData.a src/libAlgorithms.a 

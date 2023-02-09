@@ -13,13 +13,19 @@ int main(int argc, char** argv)
 	std::cout << "=========================================================="
 		      << "=======================================\n\n";
 
-	constexpr char const* const options = "t:h";
+	constexpr char const* const options = "t:o:h";
 	constexpr char const* const usage = "[options]\n\n"\
 
-		"-t [1 | 2] Run experiment (1) or run chosen algorithm (2) individually to solve the SSSP problem:\n";
+		"-t [1 | 2] Run experiment (1) or run chosen algorithm (2) individually to solve the SSSP problem:\n"\
+		"-o ../graph_instances/filename\n" \
+		"-h Show this help.\n";
 
 	int task;
+	std::string filename;
 	int c;
+
+	extern int opterr;
+	opterr = 0;
 
 	while((c = getopt(argc, argv, options)) != -1)
 	{
@@ -28,21 +34,29 @@ int main(int argc, char** argv)
 			case 't':
 			{
 				task = std::stoi(optarg);
-				std::cout << "Experiment was chosen\n";
+				break;
+			}
+			case 'o':
+			{
+				filename = std::string(optarg);
+
+				if (not std::filesystem::exists(filename))
+				{
+					throw std::logic_error("File " + filename + " is not on ../graph_instaces/");
+				}
 				break;
 			}
 
 			case 'h':
 			{
-				std::cout<< "Usage: " << argv[0] << usage;
-				break;
+				std::cout<< "Usage: " << usage;
+				return -1;
 			}
 		}
 	}
 
 	if ((task < 1) or (task > 2)) 
 	{
-		std::cout << "hello I failed\n";
 		std::cerr << "Usage: " << argv[0] << usage;
 		return -1;
 	}
@@ -51,13 +65,13 @@ int main(int argc, char** argv)
 	{
 		case 1:
 		{
-			Input::parse_experiment_parameters();
+			Input::parse_experiment_parameters(filename);
 			break;
 		}
 
 		case 2:
 		{
-			Input::parse_algorithm_parameters();
+			Input::parse_algorithm_parameters(filename);
 			break;
 		}
 	}

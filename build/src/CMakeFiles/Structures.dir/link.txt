@@ -1,0 +1,2 @@
+/usr/bin/ar qc libStructures.a CMakeFiles/Structures.dir/Structures/GraphComponents.cpp.o CMakeFiles/Structures.dir/Structures/Graph.cpp.o
+/usr/bin/ranlib libStructures.a
