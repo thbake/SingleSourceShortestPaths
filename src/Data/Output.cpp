@@ -1,11 +1,11 @@
 #include "Data/Output.h"
+#include <chrono>
 #include <iomanip>
 
-using std::chrono::time_point;
 using std::chrono::high_resolution_clock;
-using std::chrono::duration;
+using TimePoint = std::chrono::time_point<high_resolution_clock>;
 using std::chrono::milliseconds;
-
+using duration_ms = std::chrono::duration<double, std::milli>;
 
 Output::Output(size_t source, size_t sink, int const algo):
 	source_id { source },
@@ -23,10 +23,10 @@ Algorithm::ShortestPaths Output::compute_shortest_path(Graph const& graph)
 
 	auto const init_end   = high_resolution_clock::now();
 
-	std::chrono::duration<double, std::milli> init_duration_ms = init_end - init_start;
+	const duration_ms init_duration_ms = init_end - init_start;
 
-	time_point<high_resolution_clock> start;
-	time_point<high_resolution_clock> end;
+	TimePoint start;
+	TimePoint end;
 
 	std::cout << "\n";
 
@@ -147,4 +147,33 @@ void Output::output_shortest_paths(Algorithm::ShortestPaths const& paths)
 	    << total_duration.count()
 	    << "ms\n";
 			
+}
+
+void Output::output_experiment_results(
+
+		std::vector<double> const& experiment_average_times,
+		size_t const runs
+)
+{
+	std::cout << "Experiment completed\n"
+		      << "The following are the average computation times of the algorithms"
+			  << " after " << runs << " each:\n\n";
+
+
+	std::cout.setf(std::ios_base::scientific);
+
+	std::cout << std::setprecision(7);
+
+	std::cout << "Naive Dijkstra:       " 
+		      << std::setw(15) << experiment_average_times[0] << " ms\n"
+
+		      << "Min-Heap Dijkstra:    " 
+			  << std::setw(15) << experiment_average_times[1] << " ms\n"
+			  
+			  << "Bellman-Ford:         " 
+			  << std::setw(15) << experiment_average_times[2] << " ms\n"
+
+			  << "Shortest Path Faster: " 
+			  << std::setw(15) << experiment_average_times[3] << " ms\n";
+
 }

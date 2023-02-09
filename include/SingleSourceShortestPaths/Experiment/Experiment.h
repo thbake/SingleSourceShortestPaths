@@ -46,7 +46,7 @@ class Experiment
 		{
 			using std::chrono::high_resolution_clock;
 			using duration_ms = std::chrono::duration<double, std::milli>;
-			using TimePoint = std::chrono::time_point<high_resolution_clock>;
+			using TimePoint   = std::chrono::time_point<high_resolution_clock>;
 			
 			auto const init_start = high_resolution_clock::now();
 

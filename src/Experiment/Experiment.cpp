@@ -53,8 +53,8 @@ void Experiment::run_experiment(Graph const& graph)
 		algo_means[3] += measure_algorithm(Algorithm::bellman_ford_faster, graph);
 	}
 
-	for (auto const time : algo_means)
-		std::cout << time.count() << std::endl;
+	//for (auto const time : algo_means)
+	//	std::cout << time.count() << std::endl;
 
 	auto const compute_average = [this](std::vector<duration_ms> durations)
 	{
@@ -66,7 +66,7 @@ void Experiment::run_experiment(Graph const& graph)
 
 	compute_average(algo_means);
 
-	Graph::print_vector_brackets(average_times);
+	Output::output_experiment_results(average_times, experiment_runs);
 }
 
 

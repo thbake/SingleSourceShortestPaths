@@ -13,7 +13,7 @@ void GraphData::read_from_file()
 
 	if (!input_file.is_open())
 
-		throw std::runtime_error("Cannont open file " + f_name);
+		throw std::runtime_error("Cannot open file " + f_name);
 
 	input_file >> number_nodes;
 	input_file >> number_edges;

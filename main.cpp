@@ -4,62 +4,61 @@
 #include <stdexcept>
 
 #include "Data/Input.h"
-#include "Experiment/Experiment.h"
 	
 int main(int argc, char** argv)
 {
 
-	std::cout << "Scientific Computing Project: Comparison of Single-Source \
-			     -Shortest-Paths' Algorithms version 0.1\n";
+	std::cout << "\nScientific Computing Project: Comparison of Single-Source"
+			  << "-Shortest-Paths' Algorithms version 0.1\n";
+	std::cout << "=========================================================="
+		      << "=======================================\n\n";
 
-	
-	// Run experiment with explicit parameters
-	if (argc == 5) 
+	constexpr char const* const options = "t:h";
+	constexpr char const* const usage = "[options]\n\n"\
+
+		"-t [1 | 2] Run experiment (1) or run chosen algorithm (2) individually to solve the SSSP problem:\n";
+
+	int task;
+	int c;
+
+	while((c = getopt(argc, argv, options)) != -1)
 	{
-		std::string filename   = argv[1]; 
-
-		if (not std::filesystem::exists(filename))
+		switch (c)
 		{
-			throw std::logic_error("File " + filename + " is not on ../graph_instaces/");
+			case 't':
+			{
+				task = std::stoi(optarg);
+				std::cout << "Experiment was chosen\n";
+				break;
+			}
+
+			case 'h':
+			{
+				std::cout<< "Usage: " << argv[0] << usage;
+				break;
+			}
+		}
+	}
+
+	if ((task < 1) or (task > 2)) 
+	{
+		std::cout << "hello I failed\n";
+		std::cerr << "Usage: " << argv[0] << usage;
+		return -1;
+	}
+
+	switch (task)
+	{
+		case 1:
+		{
+			Input::parse_experiment_parameters();
+			break;
 		}
 
-		size_t source_id       = std::stoul(argv[2]) - 1;
-		size_t sink_id         = std::stoul(argv[3]) - 1 ;
-		size_t experiment_runs = std::stoul(argv[4]);
-
-
-		Input input {filename, source_id, sink_id, experiment_runs };
-		input.initialize();
-	}
-
-	// Run experiment with randomly selected nodes
-	else if (argc == 3)
-	{
-		std::string filename   = argv[1]; 
-
-		if (not std::filesystem::exists(filename))
+		case 2:
 		{
-			throw std::logic_error("File " + filename + " is not on ../graph_instaces/");
+			Input::parse_algorithm_parameters();
+			break;
 		}
-
-		size_t experiment_runs = std::stoul(argv[2]);
-
-		Input input {filename , experiment_runs};
-
-		input.initialize();
 	}
-
-	else if (argc < 2)
-	{
-		Input in;
-
-		in.initialize();
-
-	}
-
-
-	//filename = argv[3];
-	//size_t source = std::stoul(argv[4]) - 1;
-	//size_t sink   = std::stoul(argv[5]) - 1;
-	
 }

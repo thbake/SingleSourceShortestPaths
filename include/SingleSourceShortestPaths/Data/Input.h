@@ -16,9 +16,24 @@ class Input
 
 		Input(std::string const& f_name, size_t const runs);
 
-		Input(std::string const& f_name, size_t const option, size_t const runs);
+		Input(
+			std::string const& f_name, 
+			size_t const       source,
+			size_t const       sink,
+			int const          algorithm
+		);
 
 		Input();
+
+		~Input() = default;
+
+		Input(Input const& src) = delete;
+
+		Input& operator=(Input const& src) = delete;
+
+		static void parse_experiment_parameters();
+		
+		static void parse_algorithm_parameters();
 
 		void initialize();
 
@@ -29,6 +44,7 @@ class Input
 		size_t sink;
 		size_t option;
 		size_t experiment_runs;
+		int    algorithm;
 		
 
 };

@@ -20,9 +20,6 @@
 
 class Graph
 {
-	public:
-		using ValueType = Node;
-
 	private:
 
 		std::vector<Node> nodes;
