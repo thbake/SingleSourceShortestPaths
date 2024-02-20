@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Structures/GraphComponents.h"
+
 #include <fstream>
 #include <chrono>
-#include <cassert>
 
 class GraphData
 {

@@ -1,7 +1,84 @@
 #include "Algorithms/Algorithm.h"
 
 
+using Algorithm::WeightedNode;
+using Algorithm::heap_less;
+using MinHeap = std::priority_queue<WeightedNode, std::vector<WeightedNode>, heap_less>;
 using Neighbors = std::vector<Neighbor> const&;
+
+// Usual relax implementation
+void Algorithm::ShortestPaths::relax(Node const& in_node, Neighbor const& out_node, double weight)
+{
+	double  minimum_potential  = distances[in_node.id()];
+	double& neighbor_potential = distances[out_node.id()];
+
+	if (neighbor_potential > minimum_potential + weight)
+	{
+		// Change potential accordingly
+		neighbor_potential = minimum_potential + out_node.weight();
+
+		// Add predecessor
+		predecessors[out_node.id()] = Node { in_node.id(), true };
+	}
+}
+
+// Overload for heap_dijkstra
+void Algorithm::ShortestPaths::relax(
+
+		WeightedNode const& in_node, 
+		Neighbor const&     out_node,
+		double const        weight,
+		MinHeap&      min_heap
+)
+{
+	double  minimum_potential  = distances[in_node.id()];
+	double& neighbor_potential = distances[out_node.id()];
+
+	if (neighbor_potential > minimum_potential + weight)
+	{
+		// Change potential accordingly
+		neighbor_potential = minimum_potential + out_node.weight();
+
+		// Add predecessor
+		predecessors[out_node.id()] = Node { in_node.id(), true };
+
+		// Add neighbor to min_heap
+		min_heap.emplace(WeightedNode { 
+				out_node.id(),
+				neighbor_potential 
+		});
+
+	}
+}
+
+// Overload for bellman_ford_faster
+void Algorithm::ShortestPaths::relax(
+		Node const&        in_node, 
+		Neighbor const&    out_node,
+		double const       weight,
+		std::queue<Node>&  queue,
+		std::vector<bool>& in_queue
+)
+{
+
+	double  node_potential     = distances[in_node.id()];
+	double& neighbor_potential = distances[out_node.id()];
+
+	if (neighbor_potential > node_potential + weight)
+	{
+		neighbor_potential = node_potential + weight;
+
+		predecessors[out_node.id()] = Node { in_node.id(), true };
+
+		if (not in_queue[out_node.id()])
+		{
+			queue.push(Node {out_node.id(), true });
+
+			in_queue[out_node.id()] = true;
+		}
+	}
+}
+
 
 size_t compute_minimizer(
 		std::vector<double>& distances,
@@ -55,16 +132,7 @@ void Algorithm::naive_dijkstra(
 
 		for (auto const& neighbor : neighbors)
 		{
-			double  minimizer_potential = paths.distances[minimizer];
-			double& neighbor_potential  = paths.distances[neighbor.id()];
-
-			// Relax
-			if (neighbor_potential > minimizer_potential + neighbor.weight())
-			{
-				neighbor_potential = minimizer_potential + neighbor.weight();
-
-				paths.predecessors[neighbor.id()] = Node { minimizer, true };
-			}
+			paths.relax(minimizer_node, neighbor, neighbor.weight());
 		}
 	}
 }
@@ -77,10 +145,7 @@ void Algorithm::heap_dijkstra(
 {
 
 	// Initialize min-heap 
-	std::priority_queue<WeightedNode, 
-						std::vector<WeightedNode>,
-						heap_less>
-						min_heap;
+	MinHeap min_heap;
 
 	min_heap.emplace( 
 
@@ -100,35 +165,10 @@ void Algorithm::heap_dijkstra(
 
 		for (Neighbor const& neighbor : min_neighbors)
 		{
-
-			//paths.relax(minimum, neighbor, neighbor.weight(), min_heap);
-
-			double  minimum_potential  = paths.distances[minimum.id()];
-
-			double& neighbor_potential = paths.distances[neighbor.id()];
-
-			if (neighbor_potential > minimum_potential + neighbor.weight())
-			{
-				// Change potential accordingly
-				neighbor_potential = minimum_potential + neighbor.weight();
-
-				// Add predecessor and mark it as true (i.e. valid).
-				paths.predecessors[neighbor.id()] = ( 
-
-						Node { minimum.id(), true }
-
-				);
-
-				// Add neighbor to min_heap
-				min_heap.emplace(WeightedNode { 
-						neighbor.id(),
-						neighbor_potential 
-				});
-			}
+			paths.relax(minimum, neighbor, neighbor.weight(), min_heap);
 		};
 	}
 }
-
 
 bool Algorithm::bellman_ford(
 
@@ -147,19 +187,7 @@ bool Algorithm::bellman_ford(
 
 			for (auto const& neighbor : neighbors)
 			{
-
-				double  node_potential     = paths.distances[node.id()];
-				double& neighbor_potential = paths.distances[neighbor.id()];
-
-				if (neighbor_potential > node_potential + neighbor.weight())
-				{
-					neighbor_potential = node_potential + neighbor.weight();
-
-					paths.predecessors[neighbor.id()] = Node {node.id(), true};
-
-					//Somehow, if I run this line instead I call the move constructor
-					//paths.predecessors[neighbor.id()] = node; 
-				}
+				paths.relax(node, neighbor, neighbor.weight());
 			}
 		}
 	}
@@ -174,6 +202,7 @@ bool Algorithm::bellman_ford(
 			double  node_potential     = paths.distances[node.id()];
 			double& neighbor_potential = paths.distances[neighbor.id()];
 
+			// Found negative cost cycle. Stop
 			if (neighbor_potential > node_potential + neighbor.weight())
 			{
 				return false;
@@ -211,22 +240,7 @@ void Algorithm::bellman_ford_faster(
 
 		for (auto const& neighbor : neighbors)
 		{
-			double  node_potential     = paths.distances[node.id()];
-			double& neighbor_potential = paths.distances[neighbor.id()];
-
-			if (neighbor_potential > node_potential + neighbor.weight())
-			{
-				neighbor_potential = node_potential + neighbor.weight();
-
-				paths.predecessors[neighbor.id()] = Node { node.id(), true };
-
-				if (not in_queue[neighbor.id()])
-				{
-					queue.push(Node {neighbor.id(), true });
-
-					in_queue[neighbor.id()] = true;
-				}
-			}
+			paths.relax(node, neighbor, neighbor.weight(), queue, in_queue);
 		}
 	}
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Algorithms/Algorithm.h"
-#include <chrono>
 
 class Output
 {

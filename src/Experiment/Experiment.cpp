@@ -1,10 +1,17 @@
 #include "Experiment/Experiment.h"
+#include "Algorithms/Algorithm.h"
 
 #include <chrono>
 #include <numeric>
 #include <random>
+#include <thread>
 
-RandomNodes::RandomNodes(Graph const& graph): random_source {0}, random_sink { 0 }
+using duration_ms = std::chrono::duration<double, std::milli>;
+using time_matrix = std::vector<std::vector<duration_ms>>;
+
+RandomNodes::RandomNodes(Graph const& graph, const size_t seed): 
+	random_source {0},
+	seed { seed }
 {
 	std::vector<Node> const& graph_nodes = graph.get_nodes();
 
@@ -15,49 +22,96 @@ RandomNodes::RandomNodes(Graph const& graph): random_source {0}, random_sink { 0
 		graph.number_nodes - 1
 	};
 
-	generator.seed(1);
+	generator.seed(seed);
 
 	random_source = graph_nodes[distribution(generator)].id();
-
-	generator.seed(2);
-
-	random_sink   = graph_nodes[distribution(generator)].id();
 }
 
 Experiment::Experiment(
 	size_t const source,
-	size_t const sink,
 	size_t const runs
 ): 
 
 	source          { source },
-	sink            { sink   },
 	experiment_runs { runs   },
 	average_times ( 4, 0.0 )
 {}
 
 void Experiment::run_experiment(Graph const& graph)
 {
-	using duration_ms = std::chrono::duration<double, std::milli>;
 
-	std::vector<duration_ms> algo_means (4, std::chrono::milliseconds { 0 });
+	time_matrix algo_means (
+		4, 
+		std::vector<duration_ms>(
+			experiment_runs,
+			std::chrono::milliseconds { 0 }
+		)
+	);
 
-	for (size_t i = 0; i < experiment_runs; ++i)
+	size_t const number_threads = std::thread::hardware_concurrency();
+
+		std::cout << "Current system has " 
+			      <<  number_threads 
+				  << " hardware threads\n";
+
+	if (number_threads - 1 > 3)
 	{
-		algo_means[0] += measure_algorithm(Algorithm::naive_dijkstra, graph);
+		std::cout << "Running algorithms in parallel\n\n";
 
-		algo_means[1] += measure_algorithm(Algorithm::heap_dijkstra,  graph);
+		std::vector<std::thread> threads;
 
-		algo_means[2] += measure_algorithm(Algorithm::bellman_ford,   graph);
+		threads.emplace_back([this, &algo_means, &graph]()
+		{ 
+			compute_times(algo_means, graph, 0, Algorithm::naive_dijkstra);
+		});
 
-		algo_means[3] += measure_algorithm(Algorithm::bellman_ford_faster, graph);
+		threads.emplace_back([this, &algo_means, &graph]()
+		{ 
+			compute_times(algo_means, graph, 1, Algorithm::heap_dijkstra);
+		});
+
+		threads.emplace_back([this, &algo_means, &graph]()
+		{ 
+			compute_times(algo_means, graph, 2, Algorithm::bellman_ford);
+		});
+
+		threads.emplace_back([this, &algo_means, &graph]()
+		{ 
+			compute_times(algo_means, graph, 3, Algorithm::bellman_ford_faster);
+		});
+
+		for (size_t i = 0; i < 4; ++i)
+		{
+			threads[i].join();
+		}
 	}
 
-	auto const compute_average = [this](std::vector<duration_ms> durations)
+
+	else 
+	{
+		std::cout << "Running algorithms sequentially\n\n";
+
+		for (size_t i = 0; i < experiment_runs; ++i)
+		{
+			algo_means[0][i] = measure_algorithm(Algorithm::naive_dijkstra, graph);
+
+			algo_means[1][i] = measure_algorithm(Algorithm::heap_dijkstra,  graph);
+
+			algo_means[2][i] = measure_algorithm(Algorithm::bellman_ford,   graph);
+
+			algo_means[3][i] = measure_algorithm(Algorithm::bellman_ford_faster, graph);
+		}
+	}
+
+	auto const compute_average = [this](time_matrix durations)
 	{
 			for (size_t i = 0; i < durations.size(); ++i)
 			{
-				average_times[i] = (durations[i] / experiment_runs).count();
+				average_times[i] = (
+					std::accumulate(
+						durations[i].begin(),
+						durations[i].end(), 
+						duration_ms {0}) / experiment_runs).count();
 			}
 	};
 

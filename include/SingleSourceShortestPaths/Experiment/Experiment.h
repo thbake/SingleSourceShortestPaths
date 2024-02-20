@@ -1,16 +1,15 @@
 #pragma once
 
 #include "Data/Output.h"
-#include <chrono>
 #include <random>
 
 struct RandomNodes
 {
 
-	RandomNodes(Graph const& graph);
+	RandomNodes(Graph const& graph, size_t const seed);
 
 	size_t random_source;
-	size_t random_sink;
+	size_t seed;
 
 };
 
@@ -18,11 +17,8 @@ class Experiment
 {
 	public:
 
-		Experiment(
-			size_t const source,
-			size_t const sink,
-			size_t const runs
-		);
+		// Constructor for explicitly given source
+		Experiment(size_t const source, size_t const runs);
 
 		~Experiment() = default;
 
@@ -32,15 +28,6 @@ class Experiment
 
 		void run_experiment(Graph const& graph);
 
-
-	private:
-
-		size_t source;
-		size_t sink;
-		size_t experiment_runs;
-		std::vector<double> average_times;
-		
-	
 		template<typename A>
 		std::chrono::duration<double, std::milli>  measure_algorithm(A const& algorithm, Graph const& graph)
 		{
@@ -66,6 +53,30 @@ class Experiment
 			duration_ms total = ((end - start) + init_duration);
 
 			return total;
+		}
+
+
+	private:
+
+		size_t source;
+		size_t sink;
+		size_t experiment_runs;
+		std::vector<double> average_times;
+
+	
+
+		template <typename A>
+		void compute_times(
+			std::vector<std::vector<std::chrono::duration<double, std::milli>>>& algo_means,
+			Graph const& graph,
+			size_t const algo_index,
+			A const& algorithm)
+		{
+			for (size_t i = 0; i < experiment_runs; ++i)
+			{
+				algo_means[algo_index][i] = measure_algorithm(algorithm, graph);
+			}
+
 		}
 };
 

@@ -7,14 +7,10 @@ class Input
 {
 	public:
 
-		Input(
-			std::string const& f_name,
-			size_t const       source,
-			size_t const       sink,
-			size_t const       runs
-		);
+		// Use named constructor idiom here 
+		static Input source_given(std::string const& f_name, size_t const source, size_t const runs);
 
-		Input(std::string const& f_name, size_t const runs);
+		static Input source_random(std::string const& f_name, size_t const seed, size_t const runs);
 
 		Input(
 			std::string const& f_name, 
@@ -27,7 +23,7 @@ class Input
 
 		~Input() = default;
 
-		Input(Input const& src) = delete;
+		Input(Input const& src) = default;
 
 		Input& operator=(Input const& src) = delete;
 
@@ -39,9 +35,13 @@ class Input
 
 	private:
 
+		Input(std::string const& f_name, size_t const number, size_t const runs);
+
 		std::string filename;
+		size_t number;
 		size_t source;
 		size_t sink;
+		size_t seed;
 		size_t option;
 		size_t experiment_runs;
 		int    algorithm;

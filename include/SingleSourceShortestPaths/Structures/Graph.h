@@ -2,22 +2,6 @@
 
 #include "Data/GraphData.h"
 
-//class EdgeIterator
-//{
-//	public:
-//
-//		using ValueType     = typename Graph::ValueType;
-//		using PointerType   = ValueType*;
-//		using ReferenceType = ValueType&;
-//
-//		EdgeIterator(PointerType ptr):
-//			memory_pointer { ptr }
-//		{}
-//
-//	private:
-//		PointerType memory_pointer;
-//};
-
 class Graph
 {
 	private:

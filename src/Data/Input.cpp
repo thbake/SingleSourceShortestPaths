@@ -1,5 +1,4 @@
 #include "Data/Input.h"
-#include "Algorithms/Algorithm.h"
 #include "Experiment/Experiment.h"
 
 #include <stdexcept>
@@ -8,33 +7,37 @@
 #include <filesystem>
 
 
-
-// Explicit experiment constructor
-Input::Input(
-	std::string const& f_name,
-	size_t const       source,
-	size_t const       sink,
-	size_t const       runs
-):
+Input::Input(std::string const& f_name, size_t const number, size_t const runs):
 	filename { f_name },
-	source   { source },
-	sink     { sink },
+	number   { number },
+	source   { Graph::invalid_id },
+	sink     { Graph::invalid_id },
+	seed     { 0 },
 	option   { 0 },
 	experiment_runs { runs },
 	algorithm { 0 }
-
 {}
+
+// Explicit experiment constructor
+inline Input Input::source_given(std::string const& f_name, size_t const source, size_t const runs)
+{
+	Input source_input { f_name, source, runs };
+
+	source_input.source = source_input.number;
+	
+	return source_input;
+}
 
 // Experiment with random nodes
-Input::Input(std::string const& f_name, size_t const runs):
-	filename { f_name },
-	source   { Graph::invalid_id },
-	sink     { Graph::invalid_id },
-	option   { 1 },
-	experiment_runs { runs },
-	algorithm { 0 }
+inline Input Input::source_random(std::string const& f_name, size_t const seed, size_t const runs)
+{
+	Input random_input { f_name, seed, runs };
 
-{}
+	random_input.seed   = random_input.number;
+	random_input.option = 1;
+	
+	return random_input;
+}
 
 Input::Input(
 	std::string const& f_name, 
@@ -43,9 +46,11 @@ Input::Input(
 	int const          algorithm
 ):
 	filename  { f_name },
+	number    { 0 },
 	source    { source },
 	sink      { sink   },
-	option    { 2      },
+	seed      { 0 },
+	option    { 2 },
 	experiment_runs { 0 },
 	algorithm { algorithm }
 {}
@@ -54,9 +59,9 @@ void Input::parse_experiment_parameters(std::string const& filename)
 {
 	std::cout << "To run the experiment provide\n\n"
 
-			  << "    1) SOURCE SINK NUMBER_RUNS, to run with given source and sink or\n\n"
+			  << "    OPTION (1) SOURCE NUMBER_RUNS, to run with given source or\n\n"
 
-			  << "    2) NUMBER_RUNS, to run with randomly selected source and sink\n\n";
+			  << "    OPTION (2) SEED NUMBER_RUNS, to run with randomly selected source\n\n";
 
 	size_t argc = 0;
 
@@ -77,23 +82,25 @@ void Input::parse_experiment_parameters(std::string const& filename)
 		++argc;
 	}
 
-	if (argc == 3) 
+	size_t option = std::stoul(parameters[0]);
+
+	if (option == 1) 
 	{
-		size_t source_id       = std::stoul(parameters[0]) - 1;
-		size_t sink_id         = std::stoul(parameters[1]) - 1 ;
+		size_t source_id       = std::stoul(parameters[1]) - 1;
 		size_t experiment_runs = std::stoul(parameters[2]);
 
 
-		Input input { filename, source_id, sink_id, experiment_runs };
+		Input input = Input::source_given(filename, source_id, experiment_runs);
 		input.initialize();
 	}
 
 	// Run experiment with randomly selected nodes
-	else if (argc == 1)
+	else if (option == 2)
 	{
-		size_t experiment_runs = std::stoul(parameters[0]);
+		size_t seed            = std::stoul(parameters[1]);
+		size_t experiment_runs = std::stoul(parameters[2]);
 
-		Input input {filename , experiment_runs};
+		Input input = Input::source_random(filename , seed, experiment_runs);
 
 		input.initialize();
 	}
@@ -180,10 +187,10 @@ void Input::initialize()
 		case 0:
 		{
 			std::cout << "Running experiment on graph " + filename + " with "
-				      << "given source and sink nodes: "
-				      << source + 1<< " " << sink + 1<< "\n\n";
+				      << "given source node: "
+				      << source + 1 <<  "\n\n";
 
-			Experiment experiment { source, sink, experiment_runs };
+			Experiment experiment { source, experiment_runs };
 
 			experiment.run_experiment(graph);
 
@@ -192,18 +199,17 @@ void Input::initialize()
 	
 		case 1:
 		{
-			RandomNodes random { graph };
+			RandomNodes random { graph, seed };
 
 			std::cout << "Running experiment on graph " + filename + " with " 
-				      << "randomly selected source and sink nodes: " 
+				      << "randomly selected source node and given seed: " 
 				      << random.random_source + 1
 					  << " " 
-					  << random.random_sink   + 1 << "\n";
+					  << random.seed << "\n\n";
 
 			Experiment experiment 
 			{ 
-				random.random_source,
-				random.random_sink, 
+				random.random_source, 
 				experiment_runs
 			};
 

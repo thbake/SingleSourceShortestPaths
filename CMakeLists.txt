@@ -16,6 +16,13 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
 endif()
 
+option(ENABLE_OPTIMIZATION "Enable optimization flags" OFF)
+
+# Add optimization flag if enabled
+if (ENABLE_OPTIMIZATION)
+	add_compile_options(-O2)
+endif()
+
 # The compiled library code is here
 add_subdirectory(src)
 
@@ -34,6 +41,7 @@ target_link_libraries(shortest_paths
 	PUBLIC Experiment
 	PUBLIC Structures
 	)
+
 
 #file(GLOB_RECURSE build_files "${CMAKE_BINARY_DIR}/*")
 #file(REMOVE_RECURSE ${build_files})

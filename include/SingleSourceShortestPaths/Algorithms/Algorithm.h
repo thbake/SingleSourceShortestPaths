@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Structures/Graph.h"
+
 #include <algorithm>
 #include <limits>
 #include <queue>
@@ -46,22 +47,23 @@ namespace Algorithm {
 			std::fill(distances.begin(), distances.end(), Graph::infinity);
 		}
 
-		// For now not used
-		void relax(WeightedNode const& in_node, Neighbor const& out_node, double weight)
-		{
-			double  minimum_potential  = distances[in_node.node_id];
-			double& neighbor_potential = distances[out_node.id()];
+		void relax(Node const& in_node, Neighbor const& out_node, double weight);
 
-			if (neighbor_potential > minimum_potential + weight)
-			{
-				// Change potential accordingly
-				neighbor_potential = minimum_potential + out_node.weight();
+		void relax(
+			WeightedNode const& in_node,
+			Neighbor const&     out_node,
+			double const        weight, 
+			std::priority_queue<WeightedNode, std::vector<WeightedNode> , heap_less>& min_heap
+		);
 
-				// Add predecessor
-				predecessors[out_node.id()] = Node { in_node.node_id, true };
+		void relax(
+			Node const&        in_node, 
+			Neighbor const&    out_node,
+			double const       weight,
+			std::queue<Node>&  queue,
+			std::vector<bool>& in_queue
+		);
 
-			}
-		}
 
 		size_t              source;
 		std::vector<Node>   predecessors;

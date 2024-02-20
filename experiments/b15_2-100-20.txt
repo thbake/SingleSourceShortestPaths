@@ -1,0 +1,31 @@
+Scientific Computing Project: Comparison of Single-Source-Shortest-Paths' Algorithms version 0.1
+=================================================================================================
+
+To run the experiment provide
+
+    OPTION (1) SOURCE NUMBER_RUNS, to run with given source or
+
+    OPTION (2) SEED NUMBER_RUNS, to run with randomly selected source
+
+2 100 20
+
+Initializing graph:
+===================
+
+Initialization of graph successful
+==================================
+Graph ../graph_instances/b15.gph has 100 vertices and 125 edges
+
+Running experiment on graph ../graph_instances/b15.gph with randomly selected source node and given seed: 97 100
+
+Current system has 8 hardware threads
+Running algorithms in parallel
+
+Experiment completed
+
+The following are the average computation times of the algorithms after 20 runs each:
+
+Naive Dijkstra:         1.0511936e+00 ms
+Min-Heap Dijkstra:      4.3598765e-01 ms
+Bellman-Ford:           1.1353971e+00 ms
+Shortest Path Faster:   4.5254245e-01 ms

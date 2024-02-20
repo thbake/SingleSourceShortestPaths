@@ -1,5 +1,5 @@
 #include "Data/Output.h"
-#include <chrono>
+
 #include <iomanip>
 
 using std::chrono::high_resolution_clock;
@@ -157,9 +157,9 @@ void Output::output_experiment_results(
 		size_t const runs
 )
 {
-	std::cout << "Experiment completed\n"
+	std::cout << "Experiment completed\n\n"
 		      << "The following are the average computation times of the algorithms"
-			  << " after " << runs << " each:\n\n";
+			  << " after " << runs << " runs each:\n\n";
 
 
 	std::cout.setf(std::ios_base::scientific);
